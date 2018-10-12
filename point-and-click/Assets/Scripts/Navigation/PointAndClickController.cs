@@ -21,7 +21,7 @@ namespace Navigation
 
         // Публичные поля.
         public Action MovementStarted;
-        public Action MovementStoped;
+        public Action MovementStopped;
         
         // Приватные поля.
         private Coroutine movementCoroutine;
@@ -76,7 +76,7 @@ namespace Navigation
                 navigationAgent.RareNode = path[i];
             }
 
-            MovementStoped.SafeInvoke();
+            MovementStopped.SafeInvoke();
         }
 
         private void StopMovement()
@@ -84,7 +84,7 @@ namespace Navigation
             if (movementCoroutine != null)
             {
                 StopCoroutine(movementCoroutine);
-                MovementStoped.SafeInvoke();
+                MovementStopped.SafeInvoke();
             }
         }
     }

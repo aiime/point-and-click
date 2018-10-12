@@ -13,6 +13,6 @@ namespace Service.NamesOverObjects
 
     class NamesOverObjects : MonoBehaviour
     {
-        public string GameObjectTag;
+        public string GameObjectTag = "";
     }
 }
