@@ -14,10 +14,6 @@ namespace Navigation
                                           NavigationAgent navigationAgent,
                                           NavigationNode destination)
         {
-            //foreach (Node n in navigationGraph.Graph.Nodes())
-            //{
-            //    Debug.Log(n.Coordinate);
-            //}
             Node temporaryPathOriginNode = navigationGraph.Graph.AddNode(navigationAgent.transform.position);
 
             Arc  temporaryBackArc = navigationGraph.Graph.AddArc(temporaryPathOriginNode,
@@ -46,7 +42,6 @@ namespace Navigation
                                            NavigationAgent navigationAgent,
                                            NavigationNode destination)
         {
-            Debug.Log("DEST:" + destination.Node.Coordinate);
             IPath pathBack = navigationGraph.Graph.FindPath(navigationAgent.RareNode,
                                                             destination.Node,
                                                             Dfs.Direction.Undirected);

@@ -16,8 +16,8 @@ namespace Navigation
         [SerializeField] private NavigationGraph navigationGraph;
         [SerializeField] private NavigationAgent navigationAgent;
         [SerializeField] private Transform heroTransform;
-        [SerializeField] private float heroMovementSpeed; // 4
-        [SerializeField] private float heroRotationSpeed; // 400
+        [SerializeField] private float heroMovementSpeed; // 4 - обычная скорость перемещения
+        [SerializeField] private float heroRotationSpeed; // 400 - обычная скорость вращения
 
         // Публичные поля.
         public Action MovementStarted;
@@ -37,14 +37,9 @@ namespace Navigation
                 {
                     if (hit.transform.gameObject.tag == "NavigationNode")
                     {
-                        //print(hit.transform.gameObject.name);
                         StopMovement();
 
                         NavigationNode newDestination = hit.transform.gameObject.GetComponent<NavigationNode>();
-                        print(hit.transform.gameObject.name);
-                        print(hit.transform.position);
-                        print(hit.transform.gameObject.GetComponent<NavigationNode>().Node.Coordinate);
-                        print("DEST_I:" + newDestination.Node.Coordinate);
                         List<Node> newPath = Navigator.FindPath(navigationGraph, 
                                                                 navigationAgent, 
                                                                 newDestination);
@@ -57,13 +52,7 @@ namespace Navigation
 
         private IEnumerator MoveHero(List<Node> path)
         {
-            foreach (Node n in path)
-            {
-                print(n.Coordinate);
-            }
-
             MovementStarted.SafeInvoke();
-            //heroAnimator.SetFloat("Speed", 0.4f);
 
             for (int i = 0; i < path.Count; i++)
             {
@@ -81,7 +70,6 @@ namespace Navigation
                     heroTransform.rotation = 
                         Quaternion.RotateTowards(heroTransform.rotation, q, Time.deltaTime * heroRotationSpeed);
 
-                    //yield return new WaitForEndOfFrame();
                     yield return null;
                 }
 
@@ -89,7 +77,6 @@ namespace Navigation
             }
 
             MovementStoped.SafeInvoke();
-            //animator.SetFloat("Speed", 0);
         }
 
         private void StopMovement()
@@ -98,7 +85,6 @@ namespace Navigation
             {
                 StopCoroutine(movementCoroutine);
                 MovementStoped.SafeInvoke();
-                //heroAnimator.SetFloat("Speed", 0);
             }
         }
     }

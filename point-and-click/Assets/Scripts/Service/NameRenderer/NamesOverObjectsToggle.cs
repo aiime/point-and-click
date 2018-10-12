@@ -9,7 +9,7 @@ namespace Service.NamesOverObjects
     public class NamesOverObjectsToggle : Editor
     {
         private static string gameObjectsTag;
-        private static bool new_showNames = true;
+        private static bool new_showNames;
 
         public override void OnInspectorGUI()
         {
@@ -33,7 +33,7 @@ namespace Service.NamesOverObjects
             }
         }
 
-        [DrawGizmo(GizmoType.NotInSelectionHierarchy)]
+        [DrawGizmo(GizmoType.NotInSelectionHierarchy | GizmoType.InSelectionHierarchy)]
         public static void ShowNameOverGameObject(Transform objectTransform, GizmoType gizmoType)
         {
             if (new_showNames == false) return;

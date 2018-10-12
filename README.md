@@ -1,2 +1,1 @@
-# point-and-click
-Реализация point-and-click управления.
+Реализация point-and-click управления в Unity.

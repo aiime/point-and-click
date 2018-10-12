@@ -9,14 +9,5 @@ namespace Navigation
     public class NavigationNode : MonoBehaviour
     { 
         public Node Node;
-        //[SerializeField] private NavigationGraph navigationGraph;
-
-        private void Awake()
-        {
-            //Node = new Node(transform.position);
-            //if (navigationGraph.Graph == null) navigationGraph.Graph = new CustomGraph();
-            //
-            //Node = navigationGraph.Graph.AddNode(transform.position);
-        }
     }
 }
