@@ -22,9 +22,10 @@ namespace Navigation
         // Публичные поля.
         public Action MovementStarted;
         public Action MovementStopped;
-        
+
         // Приватные поля.
         private Coroutine movementCoroutine;
+        private const float MINIMUM_REACH_DISTANCE = 0.1f;
 
         private void Update()
         {
@@ -40,8 +41,8 @@ namespace Navigation
                         StopMovement();
 
                         NavigationNode newDestination = hit.transform.gameObject.GetComponent<NavigationNode>();
-                        List<Node> newPath = Navigator.FindPath(navigationGraph, 
-                                                                navigationAgent, 
+                        List<Node> newPath = Navigator.FindPath(navigationGraph,
+                                                                navigationAgent,
                                                                 newDestination);
 
                         movementCoroutine = StartCoroutine(MoveHero(newPath));
@@ -58,24 +59,10 @@ namespace Navigation
             {
                 navigationAgent.FrontNode = path[i];
 
-                while (Vector3.Distance(heroDragPoint.position, path[i].Coordinate) > 0.1f)
+                while (HeroNotCloseEnoughToNode(heroDragPoint, path[i]))
                 {
-                    heroDragPoint.position = Vector3.MoveTowards(heroDragPoint.position,
-                                                                 navigationAgent.FrontNode.Coordinate, 
-                                                                 Time.deltaTime * heroMovementSpeed);
-
-                    Quaternion targetRotationQ = 
-                        Quaternion.LookRotation(navigationAgent.FrontNode.Coordinate - heroDragPoint.position);
-
-                    targetRotationQ = Quaternion.Euler(0, 
-                                                       targetRotationQ.eulerAngles.y, 
-                                                       targetRotationQ.eulerAngles.z);
-
-                    heroDragPoint.rotation = 
-                        Quaternion.RotateTowards(heroDragPoint.rotation, 
-                                                 targetRotationQ, 
-                                                 Time.deltaTime * heroRotationSpeed);
-
+                    ChangeHeroPosition(heroDragPoint, navigationAgent);
+                    ChangeHeroRotation(heroDragPoint, navigationAgent);
                     yield return null;
                 }
 
@@ -91,6 +78,38 @@ namespace Navigation
             {
                 StopCoroutine(movementCoroutine);
                 MovementStopped.SafeInvoke();
+            }
+        }
+
+        private void ChangeHeroPosition(Transform heroDragPoint, NavigationAgent heroNavigationAgent)
+        {
+            heroDragPoint.position = Vector3.MoveTowards(heroDragPoint.position,
+                                                         heroNavigationAgent.FrontNode.Coordinate,
+                                                         Time.deltaTime * heroMovementSpeed);
+        }
+
+        private void ChangeHeroRotation(Transform heroDragPoint, NavigationAgent heroNavigationAgent)
+        {
+            Quaternion targetRotation =
+                Quaternion.LookRotation(heroNavigationAgent.FrontNode.Coordinate - heroDragPoint.position);
+
+            // Обнуляем x-компоненту, дабы модель героя не наклонялась на горках.
+            targetRotation = Quaternion.Euler(0, targetRotation.eulerAngles.y, targetRotation.eulerAngles.z);
+
+            heroDragPoint.rotation = Quaternion.RotateTowards(heroDragPoint.rotation,
+                                                              targetRotation,
+                                                              Time.deltaTime * heroRotationSpeed);
+        }
+
+        private bool HeroNotCloseEnoughToNode(Transform heroPosition, Node targetNode)
+        {
+            if (Vector3.Distance(heroDragPoint.position, targetNode.Coordinate) > MINIMUM_REACH_DISTANCE)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

@@ -5110,7 +5110,7 @@ MonoBehaviour:
   mainCamera: {fileID: 534669904}
   navigationGraph: {fileID: 1125442070}
   navigationAgent: {fileID: 873790449}
-  heroTransform: {fileID: 873790453}
+  heroDragPoint: {fileID: 873790453}
   heroMovementSpeed: 4
   heroRotationSpeed: 400
 --- !u!114 &873790449
@@ -5140,7 +5140,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &873790451
 MonoBehaviour:
